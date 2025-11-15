@@ -16,20 +16,88 @@ def norm(vec):
     
     return math.sqrt(sum_of_squares)
 
+
+# Assume full vec is sorted alphabetically
+
+def convert_sparse_to_full(vec, full_vec):
+    result = []  # Must be a list
+    for word in full_vec:
+        result.append(vec.get(word, 0))
+    return result
+
+    # def insertion_sort(vec):
+    #     for i in range(1, len(vec)):
+    #         key = string_to_ascii(vec[i])
+    #         j = i - 1
+    #         while j >= 0 and key < string_to_ascii(vec[j]):
+    #             vec[j+1] = vec[j]
+    #             j -= 1
+    #         vec[j+1] = key
+
+# def string_to_ascii(word):
+#     ascii_value = 0
+#     for char in word:
+#         ascii_value += ord(char)
+#     return ascii_value
+
 def cosine_similarity(vec1, vec2):
+    full_vec = sorted(set(list(vec1.keys()) + list(vec2.keys())))
+
+    full_vec1 = convert_sparse_to_full(vec1, full_vec)
+    full_vec2 = convert_sparse_to_full(vec2, full_vec)
     dot_product = 0
-    
-    pass
+    for i in range(len(full_vec1)):
+        dot_product += full_vec1[i]*full_vec2[i]
+    if dot_product == 0:
+        return -1
+    return dot_product / ((norm(vec1) * norm(vec2)))
 
 def build_semantic_descriptors(sentences):
-    pass
+    unique_words = {}
+    for sentence in sentences:
+        for word in sentence:
+            if word not in unique_words.keys():
+                unique_words[word] = {}
+        for word in set(sentence):
+            word_counts = sentence_word_counts(sentence, word)
+            for key, value in word_counts.items():
+                unique_words[word][key] = unique_words[word].get(key, 0) + value
+    return unique_words
+
+def sentence_word_counts(sentence, target_word):
+    word_counts = {}
+    for word in sentence:
+        if word != target_word:
+            word_counts[word] = word_counts.get(word, 0) + 1
+    return word_counts
 
 def build_semantic_descriptors_from_files(filenames):
-    pass
+    all_sentences = []
+    SENTENCE_SEPARATORS = [".", "!", "?"]
+    SENTENCE_PUNCTUATION = [",", "-", "--", ";", ":"]
+    for filename in filenames:
+        with open(filename, "r", encoding = "latin1") as f:
+            sentences = f.read().lower()
+        for separators in SENTENCE_SEPARATORS:
+            sentences = sentences.replace(separators, "%20")
+        sentences = sentences.split("%20")
+        for i in range(len(sentences)):
+            for punctuation in SENTENCE_PUNCTUATION:
+                sentences[i] = sentences[i].replace(punctuation, " ")
+            sentences[i] = sentences[i].split()
+        for sentence in sentences:
+            if sentence:
+                all_sentences.append(sentence)
+    return build_semantic_descriptors(all_sentences)
+
 
 def most_similar_word(word, choices, semantic_descriptors, similarity_fn):
-    pass
-
+    vec1 = {}
+    vec2 = {}
+    for choice in choices:
+        for key in semantic_descriptors.keys():
+            if choice == key:
+                vec2 = semantic_descriptors[key]
 
 def run_similarity_test(filename, semantic_descriptors, similarity_fn):
     pass
