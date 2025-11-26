@@ -100,5 +100,6 @@ def most_similar_word(word, choices, semantic_descriptors, similarity_fn):
                 vec2 = semantic_descriptors[key]
                 
 
+
 def run_similarity_test(filename, semantic_descriptors, similarity_fn):
     pass
