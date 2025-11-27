@@ -48,7 +48,7 @@ def cosine_similarity(vec1, vec2):
     dot_product = 0
     for i in range(len(full_vec1)):
         dot_product += full_vec1[i]*full_vec2[i]
-    if dot_product == 0:
+    if (norm(vec1) * norm(vec2)) == 0:
         return -1
     return dot_product / ((norm(vec1) * norm(vec2)))
 
