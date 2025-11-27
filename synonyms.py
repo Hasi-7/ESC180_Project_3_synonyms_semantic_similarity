@@ -119,44 +119,45 @@ def run_similarity_test(filename, semantic_descriptors, similarity_fn):
     for question, choices in question_choice.items():
         if most_similar_word(question, choices, semantic_descriptors, similarity_fn) == question_correct_answer[question]:
             correct_answers += 1
-    return correct_answers, len(question_choice)
+    return (correct_answers/len(question_choice))*100
 
 if __name__ == "__main__":
-    # Test 1: norm function
-    print("Test 1: norm function")
-    vec = {"cat": 3, "dog": 4}
-    print(f"norm({vec}) = {norm(vec)}")  # Should be 5.0
+    # Test 1: Build descriptors from the c_file corpus
+    print("=" * 60)
+    print("Test 1: Building semantic descriptors from corpus files")
+    print("=" * 60)
+    corpus_files = ["c_file1.txt", "c_file2.txt", "c_file3.txt"]
+    sem_descriptors = build_semantic_descriptors_from_files(corpus_files)
+    print(f"Total words with descriptors: {len(sem_descriptors)}")
     print()
     
-    # Test 2: build_semantic_descriptors
-    print("Test 2: build_semantic_descriptors")
-    sentences = [["i", "am", "a", "sick", "man"],
-                 ["i", "am", "a", "spiteful", "man"],
-                 ["i", "am", "an", "unattractive", "man"]]
-    descriptors = build_semantic_descriptors(sentences)
-    print(f"Descriptor for 'man': {descriptors['man']}")
-    print(f"Descriptor for 'i': {descriptors['i']}")
+    # Test 2: Run a simple dummy test
+    print("=" * 60)
+    print("Test 2: Running c_dummy_test1.txt")
+    print("=" * 60)
+    percentage1 = run_similarity_test("c_dummy_test1.txt", sem_descriptors, cosine_similarity)
+    print(f"Accuracy: {percentage1:.2f}%")
     print()
     
-    # Test 3: cosine_similarity
-    print("Test 3: cosine_similarity")
-    vec1 = {"a": 1, "b": 2, "c": 3}
-    vec2 = {"b": 1, "c": 2, "d": 1}
-    print(f"cosine_similarity({vec1}, {vec2}) = {cosine_similarity(vec1, vec2)}")
+    # Test 3: Run all dummy tests
+    print("=" * 60)
+    print("Test 3: Running all dummy tests")
+    print("=" * 60)
+    for i in range(1, 6):
+        test_file = f"c_dummy_test{i}.txt"
+        try:
+            percentage = run_similarity_test(test_file, sem_descriptors, cosine_similarity)
+            print(f"{test_file}: {percentage:.2f}%")
+        except FileNotFoundError:
+            print(f"{test_file}: File not found")
     print()
     
-    # Test 4: most_similar_word
-    print("Test 4: most_similar_word")
-    sem_desc = {
-        "cat": {"animal": 2, "pet": 1, "furry": 1},
-        "dog": {"animal": 2, "pet": 1, "bark": 1},
-        "car": {"vehicle": 2, "drive": 1},
-        "truck": {"vehicle": 2, "drive": 1, "large": 1}
-    }
-    choices = ["dog", "car", "truck"]
-    result = most_similar_word("cat", choices, sem_desc, cosine_similarity)
-    print(f"Most similar to 'cat' from {choices}: {result}")  # Should be "dog"
-    print()
+    # Test 4: Run main test.txt
+    print("=" * 60)
+    print("Test 4: Running main test.txt")
+    print("=" * 60)
+    percentage_main = run_similarity_test("test.txt", sem_descriptors, cosine_similarity)
+    print(f"Accuracy: {percentage_main:.2f}%")
 
-    
+
 
