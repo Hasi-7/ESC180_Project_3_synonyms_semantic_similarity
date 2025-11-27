@@ -90,16 +90,38 @@ def build_semantic_descriptors_from_files(filenames):
                 all_sentences.append(sentence)
     return build_semantic_descriptors(all_sentences)
 
-
 def most_similar_word(word, choices, semantic_descriptors, similarity_fn):
     vec1 = {}
     vec2 = {}
+    best_score = -1
+    best_choice = choices[0]
     for choice in choices:
-        for key in semantic_descriptors.keys():
-            if choice == key:
-                vec2 = semantic_descriptors[key]
-                
-
+        vec2 = semantic_descriptors[choice]
+        vec1 = semantic_descriptors[word]
+        score = similarity_fn(vec1, vec2)
+        if score > best_score:
+            best_choice = choice
+    return best_choice
 
 def run_similarity_test(filename, semantic_descriptors, similarity_fn):
+    lines = []
+    correct_answers = 0
+    with open(filename, "r", encoding = "latin1") as f:
+        for line in f:
+            line = line.strip().split()
+            lines.append(line)
+    question_correct_answer = {}
+    question_choice = {}
+    for i in range(len(lines)):
+        question_correct_answer.update({lines[i][0]: lines[i][1]})
+        question_choice.update({lines[i][0]: lines[i][2:]})
+    for question, choices in question_choice.items():
+        if most_similar_word(question, choices, semantic_descriptors, similarity_fn) == question_correct_answer[question]:
+            correct_answers += 1
+    return correct_answers, len(question_choice)
+
+if __name__ == "__main__":
     pass
+
+
+
