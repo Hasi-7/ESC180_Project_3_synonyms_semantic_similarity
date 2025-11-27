@@ -45,7 +45,7 @@ def cosine_similarity(vec1, vec2):
 
     full_vec1 = convert_sparse_to_full(vec1, full_vec)
     full_vec2 = convert_sparse_to_full(vec2, full_vec)
-    dot_product = 0
+    dot_product = 0.0
     for i in range(len(full_vec1)):
         dot_product += full_vec1[i]*full_vec2[i]
     if (norm(vec1) * norm(vec2)) == 0:
@@ -100,6 +100,7 @@ def most_similar_word(word, choices, semantic_descriptors, similarity_fn):
         vec1 = semantic_descriptors[word]
         score = similarity_fn(vec1, vec2)
         if score > best_score:
+            best_score = score
             best_choice = choice
     return best_choice
 
