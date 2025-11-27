@@ -122,7 +122,41 @@ def run_similarity_test(filename, semantic_descriptors, similarity_fn):
     return correct_answers, len(question_choice)
 
 if __name__ == "__main__":
-    pass
+    # Test 1: norm function
+    print("Test 1: norm function")
+    vec = {"cat": 3, "dog": 4}
+    print(f"norm({vec}) = {norm(vec)}")  # Should be 5.0
+    print()
+    
+    # Test 2: build_semantic_descriptors
+    print("Test 2: build_semantic_descriptors")
+    sentences = [["i", "am", "a", "sick", "man"],
+                 ["i", "am", "a", "spiteful", "man"],
+                 ["i", "am", "an", "unattractive", "man"]]
+    descriptors = build_semantic_descriptors(sentences)
+    print(f"Descriptor for 'man': {descriptors['man']}")
+    print(f"Descriptor for 'i': {descriptors['i']}")
+    print()
+    
+    # Test 3: cosine_similarity
+    print("Test 3: cosine_similarity")
+    vec1 = {"a": 1, "b": 2, "c": 3}
+    vec2 = {"b": 1, "c": 2, "d": 1}
+    print(f"cosine_similarity({vec1}, {vec2}) = {cosine_similarity(vec1, vec2)}")
+    print()
+    
+    # Test 4: most_similar_word
+    print("Test 4: most_similar_word")
+    sem_desc = {
+        "cat": {"animal": 2, "pet": 1, "furry": 1},
+        "dog": {"animal": 2, "pet": 1, "bark": 1},
+        "car": {"vehicle": 2, "drive": 1},
+        "truck": {"vehicle": 2, "drive": 1, "large": 1}
+    }
+    choices = ["dog", "car", "truck"]
+    result = most_similar_word("cat", choices, sem_desc, cosine_similarity)
+    print(f"Most similar to 'cat' from {choices}: {result}")  # Should be "dog"
+    print()
 
-
+    
 
