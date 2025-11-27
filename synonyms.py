@@ -96,8 +96,8 @@ def most_similar_word(word, choices, semantic_descriptors, similarity_fn):
     best_score = -1
     best_choice = choices[0]
     for choice in choices:
-        vec2 = semantic_descriptors[choice]
-        vec1 = semantic_descriptors[word]
+        vec2 = semantic_descriptors.get(choice, {})
+        vec1 = semantic_descriptors.get(word, {})
         score = similarity_fn(vec1, vec2)
         if score > best_score:
             best_score = score
@@ -122,42 +122,4 @@ def run_similarity_test(filename, semantic_descriptors, similarity_fn):
     return (correct_answers/len(question_choice))*100
 
 if __name__ == "__main__":
-    # Test 1: Build descriptors from the c_file corpus
-    print("=" * 60)
-    print("Test 1: Building semantic descriptors from corpus files")
-    print("=" * 60)
-    corpus_files = ["c_file1.txt", "c_file2.txt", "c_file3.txt"]
-    sem_descriptors = build_semantic_descriptors_from_files(corpus_files)
-    print(f"Total words with descriptors: {len(sem_descriptors)}")
-    print()
     
-    # Test 2: Run a simple dummy test
-    print("=" * 60)
-    print("Test 2: Running c_dummy_test1.txt")
-    print("=" * 60)
-    percentage1 = run_similarity_test("c_dummy_test1.txt", sem_descriptors, cosine_similarity)
-    print(f"Accuracy: {percentage1:.2f}%")
-    print()
-    
-    # Test 3: Run all dummy tests
-    print("=" * 60)
-    print("Test 3: Running all dummy tests")
-    print("=" * 60)
-    for i in range(1, 6):
-        test_file = f"c_dummy_test{i}.txt"
-        try:
-            percentage = run_similarity_test(test_file, sem_descriptors, cosine_similarity)
-            print(f"{test_file}: {percentage:.2f}%")
-        except FileNotFoundError:
-            print(f"{test_file}: File not found")
-    print()
-    
-    # Test 4: Run main test.txt
-    print("=" * 60)
-    print("Test 4: Running main test.txt")
-    print("=" * 60)
-    percentage_main = run_similarity_test("test.txt", sem_descriptors, cosine_similarity)
-    print(f"Accuracy: {percentage_main:.2f}%")
-
-
-
