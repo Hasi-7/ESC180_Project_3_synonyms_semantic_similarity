@@ -123,36 +123,36 @@ def run_similarity_test(filename, semantic_descriptors, similarity_fn):
 
 if __name__ == "__main__":
     # Test 1: Build descriptors from Star Wars only
-    print("=" * 60)
-    print("Test 1: Building semantic descriptors from sw.txt")
-    print("=" * 60)
-    sem_descriptors_sw = build_semantic_descriptors_from_files(["sw.txt"])
-    print(f"Total words with descriptors: {len(sem_descriptors_sw)}")
-    print()
+    # print("=" * 60)
+    # print("Test 1: Building semantic descriptors from sw.txt")
+    # print("=" * 60)
+    # sem_descriptors_sw = build_semantic_descriptors_from_files(["sw.txt"])
+    # print(f"Total words with descriptors: {len(sem_descriptors_sw)}")
+    # print()
     
-    # Test 2: Run test.txt with Star Wars corpus
-    print("=" * 60)
-    print("Test 2: Running test.txt with sw.txt corpus")
-    print("=" * 60)
-    percentage_sw = run_similarity_test("test.txt", sem_descriptors_sw, cosine_similarity)
-    print(f"Accuracy: {percentage_sw:.2f}%")
-    print()
+    # # Test 2: Run test.txt with Star Wars corpus
+    # print("=" * 60)
+    # print("Test 2: Running test.txt with sw.txt corpus")
+    # print("=" * 60)
+    # percentage_sw = run_similarity_test("test.txt", sem_descriptors_sw, cosine_similarity)
+    # print(f"Accuracy: {percentage_sw:.2f}%")
+    # print()
     
-    # Test 3: Build descriptors from War and Peace only
-    print("=" * 60)
-    print("Test 3: Building semantic descriptors from wp.txt")
-    print("=" * 60)
-    sem_descriptors_wp = build_semantic_descriptors_from_files(["wp.txt"])
-    print(f"Total words with descriptors: {len(sem_descriptors_wp)}")
-    print()
+    # # Test 3: Build descriptors from War and Peace only
+    # print("=" * 60)
+    # print("Test 3: Building semantic descriptors from wp.txt")
+    # print("=" * 60)
+    # sem_descriptors_wp = build_semantic_descriptors_from_files(["wp.txt"])
+    # print(f"Total words with descriptors: {len(sem_descriptors_wp)}")
+    # print()
     
-    # Test 4: Run test.txt with War and Peace corpus
-    print("=" * 60)
-    print("Test 4: Running test.txt with wp.txt corpus")
-    print("=" * 60)
-    percentage_wp = run_similarity_test("test.txt", sem_descriptors_wp, cosine_similarity)
-    print(f"Accuracy: {percentage_wp:.2f}%")
-    print()
+    # # Test 4: Run test.txt with War and Peace corpus
+    # print("=" * 60)
+    # print("Test 4: Running test.txt with wp.txt corpus")
+    # print("=" * 60)
+    # percentage_wp = run_similarity_test("test.txt", sem_descriptors_wp, cosine_similarity)
+    # print(f"Accuracy: {percentage_wp:.2f}%")
+    # print()
     
     # Test 5: Build descriptors from BOTH files (best results)
     print("=" * 60)
@@ -174,6 +174,4 @@ if __name__ == "__main__":
     print("=" * 60)
     print("SUMMARY")
     print("=" * 60)
-    print(f"sw.txt only:        {percentage_sw:.2f}%")
-    print(f"wp.txt only:        {percentage_wp:.2f}%")
     print(f"Both files:         {percentage_both:.2f}%")
