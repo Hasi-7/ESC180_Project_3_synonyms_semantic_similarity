@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-# Set up autograder files
-
-cp /autograder/submission/synonyms.py /autograder/source/synonyms.py
-
-cd /autograder/source
-
-python3 run_tests.py
