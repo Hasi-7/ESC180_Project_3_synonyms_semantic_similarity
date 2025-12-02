@@ -25,21 +25,6 @@ def convert_sparse_to_full(vec, full_vec):
         result.append(vec.get(word, 0))
     return result
 
-    # def insertion_sort(vec):
-    #     for i in range(1, len(vec)):
-    #         key = string_to_ascii(vec[i])
-    #         j = i - 1
-    #         while j >= 0 and key < string_to_ascii(vec[j]):
-    #             vec[j+1] = vec[j]
-    #             j -= 1
-    #         vec[j+1] = key
-
-# def string_to_ascii(word):
-#     ascii_value = 0
-#     for char in word:
-#         ascii_value += ord(char)
-#     return ascii_value
-
 def cosine_similarity(vec1, vec2):
     full_vec = sorted(set(list(vec1.keys()) + list(vec2.keys())))
 
@@ -55,21 +40,16 @@ def cosine_similarity(vec1, vec2):
 def build_semantic_descriptors(sentences):
     unique_words = {}
     for sentence in sentences:
-        for word in sentence:
-            if word not in unique_words.keys():
+        set_sentence = set(sentence)
+        for word in set_sentence:
+            if word not in unique_words:
                 unique_words[word] = {}
-        for word in set(sentence):
-            word_counts = sentence_word_counts(sentence, word)
-            for key, value in word_counts.items():
-                unique_words[word][key] = unique_words[word].get(key, 0) + value
-    return unique_words
 
-def sentence_word_counts(sentence, target_word):
-    word_counts = {}
-    for word in sentence:
-        if word != target_word:
-            word_counts[word] = word_counts.get(word, 0) + 1
-    return word_counts
+        for word in set(sentence):
+            for other_word in sentence:
+                if word != other_word:
+                    unique_words[word][other_word] = unique_words[word].get(other_word, 0) + 1
+    return unique_words
 
 def build_semantic_descriptors_from_files(filenames):
     all_sentences = []
@@ -81,6 +61,7 @@ def build_semantic_descriptors_from_files(filenames):
         for separators in SENTENCE_SEPARATORS:
             sentences = sentences.replace(separators, "%20")
         sentences = sentences.split("%20")
+
         for i in range(len(sentences)):
             for punctuation in SENTENCE_PUNCTUATION:
                 sentences[i] = sentences[i].replace(punctuation, " ")
