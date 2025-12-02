@@ -40,16 +40,21 @@ def cosine_similarity(vec1, vec2):
 def build_semantic_descriptors(sentences):
     unique_words = {}
     for sentence in sentences:
-        set_sentence = set(sentence)
-        for word in set_sentence:
-            if word not in unique_words:
+        for word in sentence:
+            if word not in unique_words.keys():
                 unique_words[word] = {}
-
         for word in set(sentence):
-            for other_word in sentence:
-                if word != other_word:
-                    unique_words[word][other_word] = unique_words[word].get(other_word, 0) + 1
+            word_counts = sentence_word_counts(sentence, word)
+            for key, value in word_counts.items():
+                unique_words[word][key] = unique_words[word].get(key, 0) + value
     return unique_words
+
+def sentence_word_counts(sentence, target_word):
+    word_counts = {}
+    for word in set(sentence):
+        if word != target_word:
+            word_counts[word] = word_counts.get(word, 0) + 1
+    return word_counts
 
 def build_semantic_descriptors_from_files(filenames):
     all_sentences = []
