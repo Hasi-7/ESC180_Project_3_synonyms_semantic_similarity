@@ -46,7 +46,7 @@ def build_semantic_descriptors(sentences):
         for word in set(sentence):
             if word not in unique_words.keys():
                 unique_words[word] = {}
-        for word in set(sentence):
+        for word in sentence:
             word_counts = sentence_word_counts(sentence, word)
             for key, value in word_counts.items():
                 unique_words[word][key] = unique_words[word].get(key, 0) + value
