@@ -1,10 +1,10 @@
+
 '''Semantic Similarity
 
 Authors: Samantha Change and Muhammad Hasnain Heryani
 '''
 
 import math
-import time
 
 def norm(vec):
     '''Return the norm of a vector stored as a dictionary, as 
@@ -27,8 +27,6 @@ def convert_sparse_to_full(vec, full_vec):
     return result
 
 def cosine_similarity(vec1, vec2):
-    if vec1 == {} or vec2 == {}:
-        return -1
     full_vec = sorted(set(list(vec1.keys()) + list(vec2.keys())))
 
     full_vec1 = convert_sparse_to_full(vec1, full_vec)
@@ -43,38 +41,14 @@ def cosine_similarity(vec1, vec2):
 def build_semantic_descriptors(sentences):
     unique_words = {}
     for sentence in sentences:
-        for word in set(sentence):
+        for word in sentence:
             if word not in unique_words.keys():
                 unique_words[word] = {}
-        for word in sentence:
+        for word in set(sentence):
             word_counts = sentence_word_counts(sentence, word)
             for key, value in word_counts.items():
                 unique_words[word][key] = unique_words[word].get(key, 0) + value
     return unique_words
-
-# For a single sentence, all of the words have the exact same semantic descriptor, 
-# where the only difference is that the word it self needs to be removed from the semantic descriptor. 
-# Therefore, iterate through all the sentences, and for all the unique words in that sentence, add the exact same semantic descriptor. 
-# This will be almost correct, requiring one final iteration through all the keys of the semantic descriptor to remove the duplicates
-
-def build_semantic_descriptors_new(sentences):
-    unique_words = {}
-    word_counts = {}
-
-    for word in sentences:
-        if word not in unique_words.keys() and word != "":
-            unique_words[word] = {}
-        if word == "":
-            word_counts
-            unique_words[word][key] = unique_words[word].get(key, 0) + value
-            word_counts = {}
-
-        word_counts[word] = word_counts.get(word, 0) + 1
-            
-
-        
-    return unique_words
-
 
 def sentence_word_counts(sentence, target_word):
     word_counts = {}
@@ -100,9 +74,8 @@ def build_semantic_descriptors_from_files(filenames):
             sentences[i] = sentences[i].split()
         for sentence in sentences:
             if sentence:
-                all_sentences.extend(sentence + [""])
-                # The change here is that we are extending instead of appending so that it is a one dimensional array instead of a 2 dimensional, allowing a single pass insted of a double pass
-    return build_semantic_descriptors_new(all_sentences)
+                all_sentences.append(sentence)
+    return build_semantic_descriptors(all_sentences)
 
 def most_similar_word(word, choices, semantic_descriptors, similarity_fn):
     vec1 = {}
@@ -180,9 +153,7 @@ if __name__ == "__main__":
     print("=" * 60)
     print("Test 6: Running test.txt with BOTH files")
     print("=" * 60)
-    start_time = time.time()
     percentage_both = run_similarity_test("test.txt", sem_descriptors_both, cosine_similarity)
-    total_time = time.time() - start_time
     print(f"Accuracy: {percentage_both:.2f}%")
     print()
     
